@@ -1,5 +1,6 @@
 """Консольный магазин «СпортТовары»."""
 from __future__ import annotations
+
 import json
 from pathlib import Path
 from typing import Any
@@ -14,6 +15,7 @@ PRODUCTS: list[dict[str, Any]] = [
     {"id": 7, "name": "Коврик YogaPro", "brand": "Torneo", "category": "Йога", "price": 1990, "qty": 3},
     {"id": 8, "name": "Шорты Training", "brand": "Puma", "category": "Одежда", "price": 2490, "qty": 15},
 ]
+
 ORDERS: list[dict[str, Any]] = []
 
 
@@ -31,6 +33,7 @@ def highlight_low_stock(products: list[dict], threshold: int = 3) -> str:
     lines = [f"Товары с остатком ≤ {threshold}:"]
     for p in low:
         lines.append(f"  [{p['id']}] {p['name']} ({p['brand']}) — {p['qty']} шт.")
+    return "
     return "\n".join(lines)
 
 
@@ -91,6 +94,7 @@ def create_order(products: list[dict], product_id: int, qty: int) -> dict:
             return order
     raise ValueError(f"Товар id={product_id} не найден")
 
+
 def main() -> None:
     print("=== СпортТовары ===")
     print(highlight_low_stock(PRODUCTS))
@@ -99,6 +103,7 @@ def main() -> None:
     order = create_order(PRODUCTS, 2, 1)
     path = save_orders(ORDERS)
     print(f"Заказ сохранён: {order} → {path}")
+
 
 if __name__ == "__main__":
     main()
