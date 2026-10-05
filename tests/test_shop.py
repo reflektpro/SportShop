@@ -19,3 +19,10 @@ from shop import count_by_category
 def test_count_by_category():
     c = count_by_category(PRODUCTS)
     assert "Обувь" in c and c["Обувь"] >= 1
+
+from shop import save_orders
+
+def test_save_orders(tmp_path):
+    f = tmp_path / "o.json"
+    save_orders([{"a": 1}], str(f))
+    assert f.exists()

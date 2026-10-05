@@ -65,11 +65,40 @@ def count_by_category(products: list[dict]) -> dict[str, int]:
         counts[cat] = counts.get(cat, 0) + p.get("qty", 0)
     return counts
 
+
+def save_orders(orders: list[dict], filename: str = "orders.json") -> Path:
+    """Сохранение заказов в JSON. Возвращает путь к файлу."""
+    path = Path(filename)
+    path.write_text(json.dumps(orders, ensure_ascii=False, indent=2), encoding="utf-8")
+    return path
+
+
+def create_order(products: list[dict], product_id: int, qty: int) -> dict:
+    """Оформление заказа: уменьшает остаток и добавляет запись в ORDERS."""
+    for p in products:
+        if p["id"] == product_id:
+            if p["qty"] < qty:
+                raise ValueError(f"Недостаточно товара: есть {p['qty']}, нужно {qty}")
+            p["qty"] -= qty
+            order = {
+                "product_id": product_id,
+                "name": p["name"],
+                "qty": qty,
+                "price": p["price"],
+                "total": p["price"] * qty,
+            }
+            ORDERS.append(order)
+            return order
+    raise ValueError(f"Товар id={product_id} не найден")
+
 def main() -> None:
     print("=== СпортТовары ===")
     print(highlight_low_stock(PRODUCTS))
     print("Поиск nike:", [p["name"] for p in search_advanced(PRODUCTS, "nike")])
     print("По категориям:", count_by_category(PRODUCTS))
+    order = create_order(PRODUCTS, 2, 1)
+    path = save_orders(ORDERS)
+    print(f"Заказ сохранён: {order} → {path}")
 
 if __name__ == "__main__":
     main()
