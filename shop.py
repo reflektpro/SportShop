@@ -22,10 +22,20 @@ def get_low_stock(products: list[dict], threshold: int = 3) -> list[dict]:
     low = [p for p in products if p.get("qty", 0) <= threshold]
     return sorted(low, key=lambda p: p.get("qty", 0))
 
+
+def highlight_low_stock(products: list[dict], threshold: int = 3) -> str:
+    """Текстовый отчёт о товарах с низким остатком."""
+    low = get_low_stock(products, threshold)
+    if not low:
+        return "Нет товаров с низким остатком."
+    lines = [f"Товары с остатком ≤ {threshold}:"]
+    for p in low:
+        lines.append(f"  [{p['id']}] {p['name']} ({p['brand']}) — {p['qty']} шт.")
+    return "\n".join(lines)
+
 def main() -> None:
     print("=== СпортТовары ===")
-    low = get_low_stock(PRODUCTS)
-    print("Низкий остаток:", [p["name"] for p in low])
+    print(highlight_low_stock(PRODUCTS))
 
 if __name__ == "__main__":
     main()
