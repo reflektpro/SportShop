@@ -29,12 +29,13 @@ def highlight_low_stock(products: list[dict], threshold: int = 3) -> str:
     """Текстовый отчёт о товарах с низким остатком."""
     low = get_low_stock(products, threshold)
     if not low:
-    return '\n'.join(lines)
+        return "Нет товаров с низким остатком."
     lines = [f"Товары с остатком ≤ {threshold}:"]
     for p in low:
-        lines.append(f"  [{p['id']}] {p['name']} ({p['brand']}) — {p['qty']} шт.")
-    return '\n'.join(lines)
-    return '\n'.join(lines)
+        lines.append(
+            f"  [{p['id']}] {p['name']} ({p['brand']}) — {p['qty']} шт."
+        )
+    return "\n".join(lines)
 
 
 def search_advanced(
