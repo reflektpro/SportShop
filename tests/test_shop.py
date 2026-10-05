@@ -13,3 +13,9 @@ from shop import search_advanced
 def test_search_advanced():
     r = search_advanced(PRODUCTS, "nike", category="Обувь")
     assert len(r) == 1 and r[0]["name"] == "Кроссовки RunFast"
+
+from shop import count_by_category
+
+def test_count_by_category():
+    c = count_by_category(PRODUCTS)
+    assert "Обувь" in c and c["Обувь"] >= 1

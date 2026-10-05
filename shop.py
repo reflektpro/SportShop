@@ -56,10 +56,20 @@ def search_advanced(
         result.append(p)
     return result
 
+
+def count_by_category(products: list[dict]) -> dict[str, int]:
+    """Словарь {категория: суммарное количество единиц}."""
+    counts: dict[str, int] = {}
+    for p in products:
+        cat = p["category"]
+        counts[cat] = counts.get(cat, 0) + p.get("qty", 0)
+    return counts
+
 def main() -> None:
     print("=== СпортТовары ===")
     print(highlight_low_stock(PRODUCTS))
     print("Поиск nike:", [p["name"] for p in search_advanced(PRODUCTS, "nike")])
+    print("По категориям:", count_by_category(PRODUCTS))
 
 if __name__ == "__main__":
     main()
