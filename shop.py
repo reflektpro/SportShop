@@ -33,9 +33,33 @@ def highlight_low_stock(products: list[dict], threshold: int = 3) -> str:
         lines.append(f"  [{p['id']}] {p['name']} ({p['brand']}) — {p['qty']} шт.")
     return "\n".join(lines)
 
+
+def search_advanced(
+    products: list[dict],
+    query: str = "",
+    category: str | None = None,
+    min_price: float | None = None,
+    max_price: float | None = None,
+) -> list[dict]:
+    """Комбинированный поиск по названию/бренду, категории и цене."""
+    q = query.lower().strip()
+    result = []
+    for p in products:
+        if q and q not in p["name"].lower() and q not in p["brand"].lower():
+            continue
+        if category and p["category"].lower() != category.lower():
+            continue
+        if min_price is not None and p["price"] < min_price:
+            continue
+        if max_price is not None and p["price"] > max_price:
+            continue
+        result.append(p)
+    return result
+
 def main() -> None:
     print("=== СпортТовары ===")
     print(highlight_low_stock(PRODUCTS))
+    print("Поиск nike:", [p["name"] for p in search_advanced(PRODUCTS, "nike")])
 
 if __name__ == "__main__":
     main()
