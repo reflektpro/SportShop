@@ -16,9 +16,16 @@ PRODUCTS: list[dict[str, Any]] = [
 ]
 ORDERS: list[dict[str, Any]] = []
 
+
+def get_low_stock(products: list[dict], threshold: int = 3) -> list[dict]:
+    """Товары с суммарным количеством ≤ threshold, отсортированные по qty."""
+    low = [p for p in products if p.get("qty", 0) <= threshold]
+    return sorted(low, key=lambda p: p.get("qty", 0))
+
 def main() -> None:
     print("=== СпортТовары ===")
-    print(f"Товаров в каталоге: {len(PRODUCTS)}")
+    low = get_low_stock(PRODUCTS)
+    print("Низкий остаток:", [p["name"] for p in low])
 
 if __name__ == "__main__":
     main()
