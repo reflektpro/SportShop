@@ -161,6 +161,10 @@ def update_quantity(cart: list[dict], product_id: int, size: Any, quantity: int)
     return False
 
 
+def total_sum(products):
+    return sum(p['price'] * p['quantity'] for p in products)
+
+
 def main() -> None:
     print("=== СпортТовары ===")
     print(highlight_low_stock(PRODUCTS))
