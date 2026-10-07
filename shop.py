@@ -160,10 +160,13 @@ def remove_from_cart(cart: list[dict], product_id: int, size: Any) -> bool:
 
 
 def update_quantity(cart: list[dict], product_id: int, size: Any, quantity: int) -> bool:
-    """Меняет количество позиции в корзине."""
-    for item in cart:
+    """Меняет количество позиции в корзине. Количество ≤ 0 удаляет позицию."""
+    for i, item in enumerate(cart):
         if item["id"] == product_id and item["size"] == size:
-            item["quantity"] = quantity
+            if quantity <= 0:
+                del cart[i]
+            else:
+                item["quantity"] = quantity
             return True
     return False
 
