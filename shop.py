@@ -162,7 +162,8 @@ def update_quantity(cart: list[dict], product_id: int, size: Any, quantity: int)
 
 
 def total_sum(products):
-    return sum(p['price'] for p in products)
+    """Сумма позиций с учётом количества (цена × quantity)."""
+    return sum(p['price'] * p['quantity'] for p in products)
 
 
 def main() -> None:
