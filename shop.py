@@ -63,11 +63,18 @@ def search_advanced(
     min_price: float | None = None,
     max_price: float | None = None,
 ) -> list[dict]:
-    """Комбинированный поиск по названию/бренду, категории и цене."""
+    """Комбинированный поиск по названию/бренду/категории, категории и диапазону цен.
+
+    Пустой запрос и None в фильтрах означают «без ограничения».
+    Если min_price > max_price — выбрасывается ValueError.
+    """
+    if min_price is not None and max_price is not None and min_price > max_price:
+        raise ValueError("min_price не может быть больше max_price")
     q = query.lower().strip()
     result = []
     for p in products:
-        if q and q not in p["name"].lower() and q not in p["brand"].lower():
+        haystack = f"{p['name']} {p['brand']} {p['category']}".lower()
+        if q and q not in haystack:
             continue
         if category and p["category"].lower() != category.lower():
             continue
