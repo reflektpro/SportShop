@@ -6,15 +6,26 @@ from pathlib import Path
 from typing import Any
 
 PRODUCTS: list[dict[str, Any]] = [
-    {"id": 1, "name": "Кроссовки RunFast", "brand": "Nike", "category": "Обувь", "price": 8990, "qty": 2},
-    {"id": 2, "name": "Мяч Pro Match", "brand": "Adidas", "category": "Мячи", "price": 2490, "qty": 12},
-    {"id": 3, "name": "Гантели 5 кг", "brand": "Torneo", "category": "Тренажёры", "price": 1590, "qty": 1},
-    {"id": 4, "name": "Футболка DryFit", "brand": "Nike", "category": "Одежда", "price": 2990, "qty": 3},
-    {"id": 5, "name": "Ракетка Power", "brand": "Wilson", "category": "Ракетки", "price": 5490, "qty": 0},
-    {"id": 6, "name": "Бутсы Predator", "brand": "Adidas", "category": "Обувь", "price": 10990, "qty": 8},
-    {"id": 7, "name": "Коврик YogaPro", "brand": "Torneo", "category": "Йога", "price": 1990, "qty": 3},
-    {"id": 8, "name": "Шорты Training", "brand": "Puma", "category": "Одежда", "price": 2490, "qty": 15},
+    {"id": 1, "name": "Кроссовки RunFast", "brand": "Nike", "category": "Обувь", "price": 8990,
+     "sizes": {41: 1, 42: 1, 43: 0}},
+    {"id": 2, "name": "Мяч Pro Match", "brand": "Adidas", "category": "Мячи", "price": 2490,
+     "sizes": {5: 12}},
+    {"id": 3, "name": "Гантели 5 кг", "brand": "Torneo", "category": "Тренажёры", "price": 1590,
+     "sizes": {"5 кг": 1}},
+    {"id": 4, "name": "Футболка DryFit", "brand": "Nike", "category": "Одежда", "price": 2990,
+     "sizes": {"M": 2, "L": 1}},
+    {"id": 5, "name": "Ракетка Power", "brand": "Wilson", "category": "Ракетки", "price": 5490,
+     "sizes": {"L2": 0}},
+    {"id": 6, "name": "Бутсы Predator", "brand": "Adidas", "category": "Обувь", "price": 10990,
+     "sizes": {40: 2, 41: 3, 42: 3}},
+    {"id": 7, "name": "Коврик YogaPro", "brand": "Torneo", "category": "Йога", "price": 1990,
+     "sizes": {"183 см": 3}},
+    {"id": 8, "name": "Шорты Training", "brand": "Puma", "category": "Одежда", "price": 2490,
+     "sizes": {"S": 5, "M": 6, "L": 4}},
 ]
+# Совместимость со старым кодом: общий остаток qty = сумма по размерам
+for _p in PRODUCTS:
+    _p["qty"] = sum(_p["sizes"].values())
 
 ORDERS: list[dict[str, Any]] = []
 
@@ -94,6 +105,53 @@ def create_order(products: list[dict], product_id: int, qty: int) -> dict:
             ORDERS.append(order)
             return order
     raise ValueError(f"Товар id={product_id} не найден")
+
+
+# ---------- Корзина покупателя (US-5) ----------
+
+def add_to_cart(cart: list[dict], products: list[dict], product_id: int,
+                size: Any, quantity: int = 1) -> tuple[bool, str]:
+    """Добавляет товар нужного размера в корзину. Возвращает (успех, сообщение)."""
+    product = next((p for p in products if p["id"] == product_id), None)
+    if product is None:
+        return False, f"Товар id={product_id} не найден"
+    if size not in product.get("sizes", {}):
+        return False, f"Размер {size} отсутствует у товара «{product['name']}»"
+    if quantity <= 0:
+        return False, "Количество должно быть больше нуля"
+    in_cart = next((i for i in cart if i["id"] == product_id and i["size"] == size), None)
+    already = in_cart["quantity"] if in_cart else 0
+    if product["sizes"][size] < already + quantity:
+        return False, f"Недостаточно товара размера {size}: есть {product['sizes'][size]} шт."
+    if in_cart:
+        in_cart["quantity"] += quantity
+    else:
+        cart.append({"id": product_id, "name": product["name"], "size": size,
+                     "price": product["price"], "quantity": quantity})
+    return True, f"«{product['name']}» (размер {size}) добавлен в корзину"
+
+
+def cart_total(cart: list[dict]) -> int:
+    """Итоговая сумма корзины."""
+    return sum(item["price"] for item in cart)
+
+
+def remove_from_cart(cart: list[dict], product_id: int, size: Any) -> bool:
+    """Удаляет позицию из корзины. True, если позиция была найдена."""
+    for i, item in enumerate(cart):
+        if item["id"] == product_id and item["size"] == size:
+            del cart[i]
+            return True
+    return False
+
+
+def update_quantity(cart: list[dict], product_id: int, size: Any, quantity: int) -> bool:
+    """Меняет количество позиции в корзине."""
+    for item in cart:
+        if item["id"] == product_id and item["size"] == size:
+            item["quantity"] = quantity
+            return True
+    return False
 
 
 def main() -> None:
