@@ -146,8 +146,8 @@ def add_to_cart(cart: list[dict], products: list[dict], product_id: int,
 
 
 def cart_total(cart: list[dict]) -> int:
-    """Итоговая сумма корзины."""
-    return sum(item["price"] for item in cart)
+    """Итоговая сумма корзины: цена × количество по каждой позиции."""
+    return sum(item["price"] * item["quantity"] for item in cart)
 
 
 def remove_from_cart(cart: list[dict], product_id: int, size: Any) -> bool:
