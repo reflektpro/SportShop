@@ -30,10 +30,17 @@ for _p in PRODUCTS:
 ORDERS: list[dict[str, Any]] = []
 
 
+def stock_of(product: dict) -> int:
+    """Общий остаток товара: сумма по размерам (sizes) или поле qty."""
+    if "sizes" in product:
+        return sum(product["sizes"].values())
+    return product.get("qty", 0)
+
+
 def get_low_stock(products: list[dict], threshold: int = 3) -> list[dict]:
-    """Товары с суммарным количеством ≤ threshold, отсортированные по qty."""
-    low = [p for p in products if p.get("qty", 0) <= threshold]
-    return sorted(low, key=lambda p: p.get("qty", 0))
+    """Товары с суммарным остатком ≤ threshold (по всем размерам), по возрастанию остатка."""
+    low = [p for p in products if stock_of(p) <= threshold]
+    return sorted(low, key=stock_of)
 
 
 def highlight_low_stock(products: list[dict], threshold: int = 3) -> str:
@@ -44,7 +51,7 @@ def highlight_low_stock(products: list[dict], threshold: int = 3) -> str:
     lines = [f"Товары с остатком ≤ {threshold}:"]
     for p in low:
         lines.append(
-            f"  [{p['id']}] {p['name']} ({p['brand']}) — {p['qty']} шт."
+            f"  [{p['id']}] {p['name']} ({p['brand']}) — {stock_of(p)} шт."
         )
     return "\n".join(lines)
 
