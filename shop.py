@@ -30,10 +30,17 @@ for _p in PRODUCTS:
 ORDERS: list[dict[str, Any]] = []
 
 
+def stock_of(product: dict) -> int:
+    """Общий остаток товара: сумма по размерам (sizes) или поле qty."""
+    if "sizes" in product:
+        return sum(product["sizes"].values())
+    return product.get("qty", 0)
+
+
 def get_low_stock(products: list[dict], threshold: int = 3) -> list[dict]:
-    """Товары с суммарным количеством ≤ threshold, отсортированные по qty."""
-    low = [p for p in products if p.get("qty", 0) <= threshold]
-    return sorted(low, key=lambda p: p.get("qty", 0))
+    """Товары с суммарным остатком ≤ threshold (по всем размерам), по возрастанию остатка."""
+    low = [p for p in products if stock_of(p) <= threshold]
+    return sorted(low, key=stock_of)
 
 
 def highlight_low_stock(products: list[dict], threshold: int = 3) -> str:
@@ -44,7 +51,7 @@ def highlight_low_stock(products: list[dict], threshold: int = 3) -> str:
     lines = [f"Товары с остатком ≤ {threshold}:"]
     for p in low:
         lines.append(
-            f"  [{p['id']}] {p['name']} ({p['brand']}) — {p['qty']} шт."
+            f"  [{p['id']}] {p['name']} ({p['brand']}) — {stock_of(p)} шт."
         )
     return "\n".join(lines)
 
@@ -56,11 +63,18 @@ def search_advanced(
     min_price: float | None = None,
     max_price: float | None = None,
 ) -> list[dict]:
-    """Комбинированный поиск по названию/бренду, категории и цене."""
+    """Комбинированный поиск по названию/бренду/категории, категории и диапазону цен.
+
+    Пустой запрос и None в фильтрах означают «без ограничения».
+    Если min_price > max_price — выбрасывается ValueError.
+    """
+    if min_price is not None and max_price is not None and min_price > max_price:
+        raise ValueError("min_price не может быть больше max_price")
     q = query.lower().strip()
     result = []
     for p in products:
-        if q and q not in p["name"].lower() and q not in p["brand"].lower():
+        haystack = f"{p['name']} {p['brand']} {p['category']}".lower()
+        if q and q not in haystack:
             continue
         if category and p["category"].lower() != category.lower():
             continue
@@ -146,12 +160,20 @@ def remove_from_cart(cart: list[dict], product_id: int, size: Any) -> bool:
 
 
 def update_quantity(cart: list[dict], product_id: int, size: Any, quantity: int) -> bool:
-    """Меняет количество позиции в корзине."""
-    for item in cart:
+    """Меняет количество позиции в корзине. Количество ≤ 0 удаляет позицию."""
+    for i, item in enumerate(cart):
         if item["id"] == product_id and item["size"] == size:
-            item["quantity"] = quantity
+            if quantity <= 0:
+                del cart[i]
+            else:
+                item["quantity"] = quantity
             return True
     return False
+
+
+def total_sum(products):
+    """Сумма позиций с учётом количества (цена × quantity)."""
+    return sum(p['price'] * p['quantity'] for p in products)
 
 
 def main() -> None:
