@@ -1,18 +1,44 @@
+from src.kernel import boot
 from src.syscalls import (
-    sys_login, sys_logout, sys_whoami,
-    sys_create_file, sys_list_files, sys_ps, sys_logs
+    sys_echo, sys_get_users, sys_login, sys_whoami,
+    sys_create_file, sys_list_files, sys_ps
 )
+
+BANNER = """
+==============================
+  StudyOS 0.2 — учебная ОС
+  help — список команд
+==============================
+"""
+
+HELP = """Команды:
+  help          справка
+  echo <текст>  ответ ядра (sys_echo)
+  users         список пользователей (sys_get_users)
+  whoami        текущий пользователь
+  login         вход в систему
+  create        создать файл
+  ls            список файлов
+  ps            список процессов
+  exit          выход"""
 
 
 def main():
+    boot()
     current_user = "guest"
-    print("StudyOS 0.2. Введите help для списка команд.")
+    print(BANNER)
     while True:
         cmd = input(f"{current_user}@studyos:~$ ").strip()
         if cmd == "exit":
+            print("Завершение работы StudyOS.")
             break
         elif cmd == "help":
-            print("Команды: help, whoami, login, create, ls, ps, exit")
+            print(HELP)
+        elif cmd.startswith("echo"):
+            print(sys_echo(cmd[4:].strip(), current_user))
+        elif cmd == "users":
+            for login, role in sys_get_users(current_user):
+                print(f"{login} ({role})")
         elif cmd == "whoami":
             print(sys_whoami(current_user))
         elif cmd == "login":

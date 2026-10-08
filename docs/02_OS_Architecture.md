@@ -67,8 +67,9 @@ file = {
 user = {
     "id": 1,
     "login": "admin",
-    "password_hash": "abc123...",
+    "password_hash": "8c6976e5b5410415bde908bd4dee15df...",  # SHA-256
     "role": "admin",
+    "created_at": "2025-01-01 10:00:00",
 }
 
 log = {

@@ -1,15 +1,22 @@
+import hashlib
 import sqlite3
+import sys
 from pathlib import Path
 
-DB_PATH = Path(__file__).resolve().parent.parent / "db" / "os.sqlite"
+if __package__ in (None, ""):  # запуск напрямую: python src/db.py
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from src.config import DB_PATH, DEFAULT_ADMIN
 
 
 def get_connection():
     """Возвращает соединение с базой данных StudyOS."""
+    DB_PATH.parent.mkdir(exist_ok=True)
     return sqlite3.connect(DB_PATH)
 
 
 def init_db():
+    """Создаёт таблицы users, processes, files, syscalls_log и администратора."""
     conn = get_connection()
     cur = conn.cursor()
     cur.executescript(
@@ -18,7 +25,8 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             login TEXT UNIQUE NOT NULL,
             password_hash TEXT NOT NULL,
-            role TEXT NOT NULL DEFAULT 'user'
+            role TEXT NOT NULL DEFAULT 'user',
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );
         CREATE TABLE IF NOT EXISTS files (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +55,7 @@ def init_db():
     )
     cur.execute(
         "INSERT OR IGNORE INTO users (login, password_hash, role) VALUES (?, ?, ?)",
-        ("admin", "abc123", "admin"),
+        (DEFAULT_ADMIN[0], hashlib.sha256(DEFAULT_ADMIN[1].encode()).hexdigest(), "admin"),
     )
     conn.commit()
     conn.close()
