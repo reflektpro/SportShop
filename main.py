@@ -26,7 +26,7 @@ def main() -> None:
         print(("[+] " if ok else "[!] ") + message)
     print(f"Сумма корзины: {cart_total(cart)} руб.")
 
-    order = create_order(cart, "Лаптев В.А.", products)
+    order = create_order(cart, "Лаптев В.И.", products)
     print_order(order)
     save_orders([order], ORDERS_FILE)
     orders = load_orders(ORDERS_FILE)
