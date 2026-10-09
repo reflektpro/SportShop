@@ -209,3 +209,24 @@ while i < len(products):
     p = products[i]
     print(f"{i + 1}. {p['name']} — {p['price']} руб.")
     i += 1
+
+
+# ===== Дополнительное задание. Список заказов =====
+print("\n===== Заказы =====")
+orders = [
+    {'date': '2026-10-07', 'client': 'Иванов И.И.',
+     'items': [{'name': 'Superstar', 'price': 7490.0, 'quantity': 1},
+               {'name': 'Runfalcon', 'price': 5590.0, 'quantity': 2}]},
+    {'date': '2026-10-02', 'client': 'Петрова А.С.',
+     'items': [{'name': 'Air Max', 'price': 8990.0, 'quantity': 1}]},
+    {'date': '2026-10-05', 'client': 'Сидоров П.А.',
+     'items': [{'name': 'Chuck Taylor', 'price': 4990.0, 'quantity': 2},
+               {'name': 'Gel-Kayano', 'price': 12490.0, 'quantity': 1}]},
+]
+
+# даты в формате ГГГГ-ММ-ДД сортируются как строки в хронологическом порядке;
+# сумма каждого заказа считается уже написанной функцией total_sum
+for order in sorted(orders, key=lambda o: o['date']):
+    print(f"{order['date']}  {order['client']:<14} позиций: {len(order['items'])}, "
+          f"сумма: {total_sum(order['items'])} руб.")
+print(f"Всего по всем заказам: {sum(total_sum(o['items']) for o in orders)} руб.")
