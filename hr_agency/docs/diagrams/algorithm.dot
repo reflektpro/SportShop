@@ -1,0 +1,14 @@
+digraph G { graph[fontname="DejaVu Sans", label="Алгоритм автоматического подбора кандидатов (match_candidates)", labelloc=t, fontsize=18, pad=0.3, nodesep=0.5, ranksep=0.45];
+node[fontname="DejaVu Sans", fontsize=12, shape=box, style=filled, fillcolor="#f3f6fb"]; edge[fontname="DejaVu Sans", fontsize=11];
+S[label="Начало", shape=ellipse, fillcolor="#eaf6ea"]; I[label="Ввод: вакансия V,\nсписок соискателей A, порог", shape=parallelogram];
+O[label="Вакансия открыта?", shape=diamond, fillcolor="#fff4e0"]; Err[label="Сообщение: «вакансия не открыта»", shape=parallelogram];
+L0[label="result ← [ ]"]; Loop[label="Для каждого соискателя a из A", shape=hexagon, fillcolor="#fff4e0"];
+K[label="skills ← |навыки(a) ∩ требования(V)| / |требования(V)|"];
+X[label="опыт(a) ≥ мин_опыт(V)?", shape=diamond, fillcolor="#fff4e0"]; Z[label="желаемая_зп(a) ≤ зп(V)?", shape=diamond, fillcolor="#fff4e0"];
+Sc[label="score ← 60·skills + 20·[опыт] + 15·[зп] + 5·[город]"];
+T[label="score ≥ порог?", shape=diamond, fillcolor="#fff4e0"]; Ad[label="result.append((a, score))"];
+So[label="Сортировать result по score (убыв.)"]; Out[label="Вывод: подборка", shape=parallelogram]; E[label="Конец", shape=ellipse, fillcolor="#eaf6ea"];
+S -> I -> O; O -> Err [label="нет"]; Err -> E; O -> L0 [label="да"]; L0 -> Loop; Loop -> K [label="очередной a"]; K -> X;
+X -> Z [label="да / нет\n(учитывается в баллах)"]; Z -> Sc [label="да / нет"]; Sc -> T; T -> Ad [label="да"]; T -> Loop [label="нет", constraint=false]; Ad -> Loop [constraint=false];
+Loop -> So [label="соискатели\nзакончились"]; So -> Out -> E;
+}
