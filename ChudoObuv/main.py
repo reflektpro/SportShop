@@ -169,3 +169,43 @@ print("\nПосле изменений:")
 for item in cart:
     print(f"{item['product']}, размер {item['size']}, {item['quantity']} шт.")
 print(f"Итого: {total_sum(cart)} руб.")
+
+
+# ===== Задание 8. Самостоятельно =====
+print("\n===== Задание 8 =====")
+
+# 8.1. Ещё два товара с разными размерами и ценами
+products.append({'id': 4, 'name': 'Gel-Kayano', 'price': 12490.0, 'sizes': {40.0: 3, 41.0: 4, 42.0: 1}})
+products.append({'id': 5, 'name': 'Chuck Taylor', 'price': 4990.0, 'sizes': {36.0: 6, 38.0: 0, 39.0: 2}})
+print(f"Товаров в каталоге: {len(products)}")
+
+
+# 8.2. Список доступных размеров (только те, что есть в наличии)
+def get_sizes(product):
+    return sorted(size for size, qty in product['sizes'].items() if qty > 0)
+
+
+# 8.3. Общее количество единиц товара
+def get_total_quantity(product):
+    return sum(product['sizes'].values())
+
+
+for p in products:
+    print(f"{p['name']}: размеры {get_sizes(p)}, всего {get_total_quantity(p)} шт.")
+
+# 8.4. Сортировка по названию (алфавитный порядок)
+print("\nТовары по алфавиту:")
+for p in sorted(products, key=lambda p: p['name']):
+    print("-", p['name'])
+
+# 8.5. Товары дешевле 6000 рублей
+cheap = [p for p in products if p['price'] < 6000]
+print("\nДешевле 6000 руб.:", ", ".join(f"{p['name']} ({p['price']} руб.)" for p in cheap))
+
+# 8.6. Вывод всех товаров по одному циклом while
+print("\nКаталог (while):")
+i = 0
+while i < len(products):
+    p = products[i]
+    print(f"{i + 1}. {p['name']} — {p['price']} руб.")
+    i += 1
