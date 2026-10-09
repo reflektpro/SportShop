@@ -90,3 +90,40 @@ cart = [
 ]
 
 print(f"Итоговая сумма заказа: {total_sum(cart)} руб.")
+
+# ===== Задание 5. Сортировка и фильтрация =====
+# Шаг 16. Сортировка по цене
+sorted_by_price = sorted(products, key=lambda p: p['price'])
+print("\nТовары по возрастанию цены:")
+for p in sorted_by_price:
+    print(f"{p['name']} — {p['price']} руб.")
+
+# Шаг 17. Товары с низким остатком (≤ 3 шт.)
+low_stock = [p for p in products if sum(p['sizes'].values()) <= 3]
+print("\nТовары с низким остатком (≤ 3 шт.):")
+for p in low_stock:
+    print(p['name'])
+
+
+# ===== Задание 6. Поиск по каталогу =====
+# Шаг 18. Поиск по названию
+def search_products(query):
+    query = query.lower()
+    return [p for p in products if query in p['name'].lower()]
+
+
+found = search_products('max')
+print("\nРезультаты поиска 'max':")
+for p in found:
+    print(p['name'])
+
+
+# Шаг 19. Фильтр по цене
+def filter_by_price(products, min_price, max_price):
+    return [p for p in products if min_price <= p['price'] <= max_price]
+
+
+result = filter_by_price(products, 5000, 8000)
+print("\nТовары от 5000 до 8000 руб.:")
+for p in result:
+    print(f"{p['name']} — {p['price']} руб.")
