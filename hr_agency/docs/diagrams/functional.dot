@@ -1,0 +1,22 @@
+digraph G { rankdir=LR; graph[fontname="DejaVu Sans", label="Функциональная схема: взаимодействие компонентов и информационные потоки", labelloc=t, fontsize=18, pad=0.3, nodesep=0.5, ranksep=0.9];
+node[fontname="DejaVu Sans", fontsize=12]; edge[fontname="DejaVu Sans", fontsize=10];
+K[label="Клавиатура / мышь\n(экранные формы)", shape=box3d, fillcolor="#eeeeee", style=filled];
+IMP[label="Файлы CSV / XLSX\n(импорт)", shape=note, style=filled, fillcolor="#fff6dc"];
+UI[label="Интерфейс\nпользователя", shape=box, style="rounded,filled", fillcolor="#fff4e0"];
+AU[label="Авторизация", shape=box, style="rounded,filled", fillcolor="#f3f6fb"];
+VAL[label="Проверка входных\nданных", shape=box, style="rounded,filled", fillcolor="#f3f6fb"];
+DIR[label="Справочники\n(CRUD)", shape=box, style="rounded,filled", fillcolor="#f3f6fb"];
+MAT[label="Подбор\nкандидатов", shape=box, style="rounded,filled", fillcolor="#f3f6fb"];
+ST[label="Этапы работы", shape=box, style="rounded,filled", fillcolor="#f3f6fb"];
+REP[label="Отчёты", shape=box, style="rounded,filled", fillcolor="#f3f6fb"];
+LOG[label="Журнал действий", shape=box, style="rounded,filled", fillcolor="#f3f6fb"];
+DB[label="База данных\nagency.db", shape=cylinder, style=filled, fillcolor="#eaf6ea"];
+OUT1[label="Экран\n(списки, формы)", shape=box3d, style=filled, fillcolor="#eeeeee"];
+OUT2[label="Файлы отчётов\nCSV / XLSX / PDF", shape=note, style=filled, fillcolor="#fff6dc"];
+K -> UI [label="команды,\nввод данных"]; IMP -> VAL [label="записи"]; UI -> AU [label="логин, пароль"]; AU -> UI [label="роль"];
+UI -> VAL [label="поля формы"]; VAL -> DIR [label="корректные\nзаписи"]; VAL -> UI [label="сообщение\nоб ошибке"];
+DIR -> DB [label="INSERT/UPDATE/\nDELETE"]; UI -> MAT [label="вакансия,\nкритерии"]; DB -> MAT [label="вакансии,\nрезюме"];
+MAT -> DB [label="подборка"]; MAT -> UI [label="ранжированный\nсписок"]; UI -> ST [label="этап"]; ST -> DB [label="этап, дата"];
+UI -> REP [label="тип отчёта,\nпериод"]; DB -> REP [label="выборка"]; REP -> OUT2; REP -> UI [label="таблица"]; UI -> OUT1;
+{AU DIR ST} -> LOG [style=dashed]; LOG -> DB [style=dashed];
+}
