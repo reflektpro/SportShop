@@ -1,0 +1,12 @@
+digraph G { rankdir=LR; graph[fontname="DejaVu Sans", label="Структурная схема программного продукта «Кадровое агентство»", labelloc=t, fontsize=18, pad=0.3, nodesep=0.35, ranksep=0.8];
+node[fontname="DejaVu Sans", fontsize=12, shape=box, style="rounded,filled", fillcolor="#f3f6fb"]; edge[arrowhead=normal];
+M[label="Главный модуль\n(меню, маршрутизация команд)", fillcolor="#fff4e0"];
+A[label="Подсистема\nавторизации"]; S[label="Подсистема ведения\nсправочников"]; F[label="Подсистема поиска\nи подбора"]; W[label="Подсистема учёта\nэтапов работы"]; Rp[label="Подсистема\nотчётности"]; X[label="Подсистема\nимпорта/экспорта"];
+M -> {A S F W Rp X};
+S -> {S1 S2 S3 S4}; S1[label="Вакансии"]; S2[label="Соискатели"]; S3[label="Работодатели"]; S4[label="Пользователи"];
+F -> {F1 F2}; F1[label="Поиск по\nкритериям"]; F2[label="Автоподбор\n(сопоставление)"];
+Rp -> {R1 R2 R3}; R1[label="Открытые/закрытые\nвакансии"]; R2[label="Кандидаты"]; R3[label="Эффективность\nрекрутеров"];
+X -> {X1 X2}; X1[label="CSV / XLSX"]; X2[label="PDF"];
+DB[label="Модуль доступа к данным (СУБД SQLite / PostgreSQL)", shape=cylinder, fillcolor="#eaf6ea"];
+{A S F W Rp X} -> DB [style=dashed, arrowhead=none];
+}

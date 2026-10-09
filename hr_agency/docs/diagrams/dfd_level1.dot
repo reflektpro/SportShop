@@ -1,0 +1,16 @@
+digraph G { rankdir=TB; graph[fontname="DejaVu Sans", label="Диаграмма потоков данных первого уровня", labelloc=t, fontsize=18, pad=0.3, nodesep=0.45, ranksep=1.0, newrank=true];
+node[fontname="DejaVu Sans", fontsize=12]; edge[fontname="DejaVu Sans", fontsize=10];
+A[label="Соискатель", shape=box, style=filled, fillcolor="#eeeeee"]; E[label="Работодатель", shape=box, style=filled, fillcolor="#eeeeee"];
+R[label="Рекрутер", shape=box, style=filled, fillcolor="#eeeeee"]; H[label="Руководитель", shape=box, style=filled, fillcolor="#eeeeee"];
+node[shape=Mrecord, style=filled, fillcolor="#dfe9f7"];
+P1[label="{1|Авторизация\nпользователя}"]; P2[label="{2|Учёт\nсоискателей}"]; P3[label="{3|Учёт работодателей\nи вакансий}"];
+P4[label="{4|Подбор\nкандидатов}"]; P5[label="{5|Регистрация\nэтапов работы}"]; P6[label="{6|Формирование\nотчётов}"];
+node[shape=record, style=filled, fillcolor="#fff6dc"];
+D1[label="D1|Пользователи"]; D2[label="D2|Соискатели"]; D3[label="D3|Работодатели"]; D4[label="D4|Вакансии"]; D5[label="D5|Подборки"]; D6[label="D6|Этапы работы"];
+R -> P1 [label="логин, пароль"]; P1 -> D1 [dir=both, label="проверка роли"];
+A -> P2 [label="резюме"]; R -> P2 [label="данные соискателя"]; P2 -> D2 [label="запись"];
+E -> P3 [label="заявка, требования"]; P3 -> D3 [label="работодатель"]; P3 -> D4 [label="вакансия"];
+D2 -> P4 [label="резюме"]; D4 -> P4 [label="требования"]; R -> P4 [label="критерии"]; P4 -> D5 [label="подборка"]; P4 -> E [label="кандидаты"];
+R -> P5 [label="этап, комментарий"]; E -> P5 [label="обратная связь"]; D5 -> P5; P5 -> D6 [label="этап"]; P5 -> A [label="приглашение"];
+D4 -> P6; D2 -> P6; D5 -> P6; D6 -> P6; D1 -> P6 [label="рекрутеры"]; P6 -> H [label="отчёты"];
+}
