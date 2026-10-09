@@ -38,3 +38,19 @@ def load_products(filename: str | Path = "data/products.json") -> list[dict]:
 def save_products(products: list[dict], filename: str | Path = "data/products.json") -> Path:
     """Сохраняет каталог товаров в JSON."""
     return write_json(products, filename)
+
+
+def load_cart(filename: str | Path = "data/cart.json") -> list[dict]:
+    """Загружает сохранённую корзину (пустой список, если файла нет).
+
+    Размеры приводятся к исходным типам так же, как в load_products.
+    """
+    cart = read_json(filename, default=[])
+    for item in cart:
+        item["size"] = _size_key(str(item["size"]))
+    return cart
+
+
+def save_cart(cart: list[dict], filename: str | Path = "data/cart.json") -> Path:
+    """Сохраняет корзину в JSON, чтобы она сохранялась между запусками программы."""
+    return write_json(cart, filename)
