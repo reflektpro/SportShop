@@ -67,6 +67,8 @@ SportShop/
 ├── data/
 │   └── products.json   # каталог товаров
 ├── my_os/              # StudyOS — учебная ОС (занятия 1–2)
+├── hr_agency/          # ПК «Кадровое агентство»: анализ, ТЗ, архитектура, ООП-модель (работы 1–4)
+├── ChudoObuv/          # основы Python, структуры данных «Чудо Обувь» (работа 5)
 ├── main.py             # точка входа: демонстрация и консольные команды
 ├── build.py            # сборка: Python, данные, тесты, запуск
 └── README.md
@@ -107,8 +109,11 @@ python build.py
 
 | № | Тема | Где смотреть | Код на момент сдачи |
 |---|---|---|---|
-| 1 | Границы ОС и нефункциональные требования (StudyOS) | [my_os/docs/01_OS_Scope_and_NFR.md](my_os/docs/01_OS_Scope_and_NFR.md), [my_os/src](my_os/src) | [my_os/](my_os) |
-| 2 | Архитектура и API ядра (StudyOS) | [my_os/docs/02_OS_Architecture.md](my_os/docs/02_OS_Architecture.md), [диаграмма компонентов](my_os/docs/02_component_diagram.png), [syscalls.py](my_os/src/syscalls.py) | [my_os/](my_os) |
+| 1 | Границы ОС и нефункциональные требования (StudyOS); анализ предметной области «Кадровое агентство» | [my_os/docs/01_OS_Scope_and_NFR.md](my_os/docs/01_OS_Scope_and_NFR.md), [my_os/src](my_os/src); [hr_agency/docs/01_Domain_Analysis.md](hr_agency/docs/01_Domain_Analysis.md) | [my_os/](my_os), [hr_agency/](hr_agency) |
+| 2 | Архитектура и API ядра (StudyOS) | [my_os/docs/02_OS_Architecture.md](my_os/docs/02_OS_Architecture.md), [диаграмма компонентов](my_os/docs/02_component_diagram.png), [syscalls.py](my_os/src/syscalls.py); ТЗ «Кадровое агентство» [hr_agency/docs/02_Technical_Specification.md](hr_agency/docs/02_Technical_Specification.md) | [my_os/](my_os), [hr_agency/](hr_agency) |
+| 3 | Построение архитектуры программного средства (эскизный и технический проект) | [hr_agency/docs/03_Sketch_Project.md](hr_agency/docs/03_Sketch_Project.md), [03_Technical_Project.md](hr_agency/docs/03_Technical_Project.md), [диаграммы](hr_agency/docs/diagrams) | [practice-3](https://github.com/reflektpro/SportShop/tree/practice-3) |
+| 4 | Объектно-ориентированное проектирование | [hr_agency/docs/04_OOP_Design.md](hr_agency/docs/04_OOP_Design.md), [agency.py](hr_agency/agency.py), [demo.py](hr_agency/demo.py), [tests](hr_agency/tests) | [practice-4](https://github.com/reflektpro/SportShop/tree/practice-4) |
+| 5 | Основы Python в VS Code, структуры данных «Чудо Обувь» | [ChudoObuv/main.py](ChudoObuv/main.py), [ChudoObuv/README.md](ChudoObuv/README.md) | [practice-5](https://github.com/reflektpro/SportShop/tree/practice-5) |
 | 6 | Agile/Scrum/Kanban: Backlog, Sprint, Kanban, Standup, Retro | [docs/03–07](docs) | [practice-6](https://github.com/reflektpro/SportShop/tree/practice-6) |
 | 7 | Git Flow, конфликты, Pull Request, Hotfix | [docs/08–12](docs) | [practice-7](https://github.com/reflektpro/SportShop/tree/practice-7) |
 | 8 | Отладка и модульное тестирование (unittest) | [docs/13_Debugging.md](docs/13_Debugging.md), [docs/14_Test_Report.md](docs/14_Test_Report.md) | [practice-8](https://github.com/reflektpro/SportShop/tree/practice-8) |
