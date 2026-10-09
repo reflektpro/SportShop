@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent
-MIN_PYTHON = (3, 8)
+MIN_PYTHON = (3, 10)
 REQUIRED_FILES = ["data/products.json", "main.py", "src/__init__.py", "src/catalog.py",
                   "src/cart.py", "src/orders.py", "src/analytics.py", "src/storage.py"]
 
