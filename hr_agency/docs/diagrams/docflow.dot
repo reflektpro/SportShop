@@ -1,0 +1,10 @@
+digraph G { graph[fontname="DejaVu Sans", label="Схема документопотока ПК «Кадровое агентство»", labelloc=t, fontsize=18, pad=0.3, nodesep=0.5, ranksep=0.7, rankdir=LR];
+node[fontname="DejaVu Sans", fontsize=11]; edge[fontname="DejaVu Sans", fontsize=10];
+node[shape=box, style="rounded,filled", fillcolor="#fde9c9"];
+Emp[label="Работодатель"]; App[label="Соискатель"]; Head[label="Руководитель\nагентства"];
+node[shape=note, style=filled, fillcolor="#eef3fa"];
+D1[label="Заявка на подбор\n(вакансия)"]; D2[label="Резюме,\nанкета соискателя"]; D3[label="Подборка\nкандидатов (CSV)"];
+D4[label="Направление\nк работодателю"]; D5[label="Обратная связь\nработодателя"]; D6[label="Отчёты: открытые\nвакансии, эффективность"];
+node[shape=box3d, style=filled, fillcolor="#d9ead3"]; Sys[label="ПК «Кадровое агентство»\n(рекрутер)"];
+Emp -> D1 -> Sys; App -> D2 -> Sys; Sys -> D3 -> Emp; Sys -> D4 -> App; Emp -> D5 -> Sys; Sys -> D6 -> Head;
+}
