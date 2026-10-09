@@ -127,3 +127,45 @@ result = filter_by_price(products, 5000, 8000)
 print("\nТовары от 5000 до 8000 руб.:")
 for p in result:
     print(f"{p['name']} — {p['price']} руб.")
+
+
+# ===== Задание 7. Мини-задача «Корзина» (шаг 20) =====
+def add_to_cart(cart, product, size, quantity):
+    cart.append({
+        'product': product['name'],
+        'price': product['price'],
+        'size': size,
+        'quantity': quantity
+    })
+
+
+def remove_from_cart(cart, name):
+    cart[:] = [item for item in cart if item['product'] != name]
+
+
+def change_quantity(cart, name, new_qty):
+    for item in cart:
+        if item['product'] == name:
+            item['quantity'] = new_qty
+            break
+
+
+cart = []
+add_to_cart(cart, products[0], 36.0, 2)
+add_to_cart(cart, products[1], 37.0, 1)
+
+print("\nКорзина:")
+for item in cart:
+    print(f"{item['product']}, размер {item['size']}, "
+          f"{item['quantity']} шт. × {item['price']} = "
+          f"{item['quantity'] * item['price']} руб.")
+
+print(f"\nИтого: {total_sum(cart)} руб.")
+
+change_quantity(cart, 'Air Max', 3)
+remove_from_cart(cart, 'Superstar')
+
+print("\nПосле изменений:")
+for item in cart:
+    print(f"{item['product']}, размер {item['size']}, {item['quantity']} шт.")
+print(f"Итого: {total_sum(cart)} руб.")
